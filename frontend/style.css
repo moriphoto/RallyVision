@@ -38,7 +38,7 @@ body, html {
 #scoreboard {
     display: flex;
     flex: 1;
-    color: #39ff14; /* Neon Green */
+    color: #39ff14;
     text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14;
     font-size: 3rem;
     font-weight: bold;
@@ -57,7 +57,7 @@ body, html {
 .serve-indicator {
     visibility: hidden;
     font-size: 1rem;
-    color: #00ffff; /* Neon Blue */
+    color: #00ffff;
     text-shadow: 0 0 10px #00ffff;
 }
 
@@ -80,6 +80,31 @@ body, html {
 
 #btn-teamA:active, #btn-teamB:active {
     background: rgba(57, 255, 20, 0.2);
+}
+
+#status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.55rem 0.9rem 0;
+    font-size: 0.75rem;
+    color: #9cff9c;
+    text-shadow: 0 0 8px #39ff14;
+    z-index: 4;
+}
+
+#btn-start-camera {
+    margin: 0.4rem 1rem 0;
+    z-index: 4;
+    background: rgba(13, 13, 13, 0.75);
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    font-family: inherit;
+    font-size: 1rem;
+    padding: 0.55rem 0.8rem;
+}
+
+#btn-start-camera.hidden {
+    display: none;
 }
 
 .divider {
