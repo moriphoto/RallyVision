@@ -2,10 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>RallyVision Stream</title>
+    <title>RallyVision Scoreboard</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
-    <video id="webcam" autoplay playsinline width="100%"></video>
+    <div id="game-container">
+        <video id="webcam" autoplay playsinline></video>
+        <div id="ui-overlay">
+            <div id="scoreboard">
+                <div class="team-section" id="teamA-section">
+                    <h2 id="name-teamA">Team A</h2>
+                    <div class="score" id="score-teamA">0</div>
+                    <div class="serve-indicator" id="serve-teamA">Service</div>
+                </div>
+                <div class="divider">-</div>
+                <div class="team-section" id="teamB-section">
+                    <h2 id="name-teamB">Team B</h2>
+                    <div class="score" id="score-teamB">0</div>
+                    <div class="serve-indicator" id="serve-teamB">Service</div>
+                </div>
+            </div>
+            <div id="controls">
+                <div class="control-btn" id="btn-teamA"></div>
+                <div class="control-btn" id="btn-teamB"></div>
+            </div>
+        </div>
+    </div>
     <script src="stream.js"></script>
 </body>
 </html>
