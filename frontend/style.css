@@ -81,3 +81,43 @@ body, html {
 #btn-teamA:active, #btn-teamB:active {
     background: rgba(57, 255, 20, 0.2);
 }
+
+.divider {
+    cursor: pointer;
+    padding: 0 0.6rem;
+}
+
+#winner-banner,
+#proposal {
+    position: relative;
+    z-index: 3;
+    margin: 0 1rem 0.75rem;
+    padding: 0.6rem 0.9rem;
+    text-align: center;
+    font-size: 1rem;
+    color: #00ffff;
+    text-shadow: 0 0 8px #00ffff;
+    background: rgba(13, 13, 13, 0.72);
+    border: 1px solid rgba(0, 255, 255, 0.35);
+}
+
+#proposal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+#proposal[hidden],
+#winner-banner[hidden] {
+    display: none;
+}
+
+#proposal-dismiss {
+    background: transparent;
+    color: #39ff14;
+    border: 1px solid #39ff14;
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.6rem;
+}

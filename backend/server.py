@@ -1,13 +1,20 @@
+from pathlib import Path
+
 from fastapi import FastAPI, WebSocket
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 import cv2
 import numpy as np
 
 app = FastAPI()
 
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+
 # Image Y increases downwards.
 Y_HISTORY_LIMIT = 30
 MIN_BALL_AREA = 20
 MAX_BALL_AREA = 8000
+BOUNCE_COOLDOWN_FRAMES = 20
 
 
 def detect_bounce(y_coords):
@@ -73,6 +80,7 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     y_coords = []
     last_position = None
+    cooldown = 0
     # Fallback until the first frame provides its width.
     table_center_x = 320
 
@@ -87,6 +95,8 @@ async def websocket_endpoint(websocket: WebSocket):
                 tracked = track_ball(frame, last_position)
 
                 if tracked is None:
+                    if cooldown > 0:
+                        cooldown -= 1
                     continue
 
                 ball_x, ball_y = tracked
@@ -95,12 +105,30 @@ async def websocket_endpoint(websocket: WebSocket):
                 if len(y_coords) > Y_HISTORY_LIMIT:
                     y_coords = y_coords[-Y_HISTORY_LIMIT:]
 
+                if cooldown > 0:
+                    cooldown -= 1
+                    continue
+
                 if detect_bounce(y_coords):
                     scoring_team = get_scoring_side(ball_x, table_center_x)
-                    print(f"Bounce detected! Point awarded to {scoring_team}")
-                    # Here you would trigger the point award logic
+                    print(f"Bounce detected! Proposing point for {scoring_team}")
+                    await websocket.send_json({
+                        "type": "point_proposal",
+                        "team": scoring_team,
+                        "ball": {"x": ball_x, "y": ball_y},
+                    })
+                    y_coords = []
+                    cooldown = BOUNCE_COOLDOWN_FRAMES
 
     except Exception as e:
         print(f"Error: {e}")
     finally:
         await websocket.close()
+
+
+@app.get("/")
+async def index():
+    return FileResponse(FRONTEND_DIR / "index.html")
+
+
+app.mount("/", StaticFiles(directory=str(FRONTEND_DIR)), name="frontend")
