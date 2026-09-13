@@ -8,8 +8,13 @@
 </head>
 <body>
     <div id="game-container">
-        <video id="webcam" autoplay playsinline></video>
+        <video id="webcam" autoplay playsinline muted></video>
         <div id="ui-overlay">
+            <div id="status-bar">
+                <span id="status-camera">Camera off</span>
+                <span id="status-vision">Vision idle</span>
+            </div>
+            <button type="button" id="btn-start-camera">Tap to start camera</button>
             <div id="scoreboard">
                 <div class="team-section" id="teamA-section">
                     <h2 id="name-teamA">Team A</h2>
