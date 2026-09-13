@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8000');
+const socket = new WebSocket('ws://localhost:8000/ws/stream');
 
 socket.onopen = () => {
   const video = document.getElementById('webcam');
