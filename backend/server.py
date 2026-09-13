@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 from fastapi import FastAPI, WebSocket
 from fastapi.responses import FileResponse
@@ -6,9 +7,13 @@ from fastapi.staticfiles import StaticFiles
 import cv2
 import numpy as np
 
+sys.path.append(str(Path(__file__).resolve().parent))
+from vision.yolo_ball import YoloBallDetector
+
 app = FastAPI()
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+YOLO_DETECTOR = YoloBallDetector()
 
 # Image Y increases downwards.
 Y_HISTORY_LIMIT = 30
@@ -81,7 +86,6 @@ async def websocket_endpoint(websocket: WebSocket):
     y_coords = []
     last_position = None
     cooldown = 0
-    # Fallback until the first frame provides its width.
     table_center_x = 320
 
     try:
@@ -92,7 +96,11 @@ async def websocket_endpoint(websocket: WebSocket):
 
             if frame is not None:
                 table_center_x = frame.shape[1] // 2
-                tracked = track_ball(frame, last_position)
+                yolo_hit = YOLO_DETECTOR.detect(frame, last_position) if YOLO_DETECTOR.available else None
+                if yolo_hit is not None:
+                    tracked = (yolo_hit[0], yolo_hit[1])
+                else:
+                    tracked = track_ball(frame, last_position)
 
                 if tracked is None:
                     if cooldown > 0:

@@ -1,0 +1,6 @@
+# Official dataset: https://lab.osai.ai/  (CC BY-NC-SA 4.0)
+path: /home/workdir/openttgames/yolo
+train: images/train
+val: images/val
+names:
+  0: ball
